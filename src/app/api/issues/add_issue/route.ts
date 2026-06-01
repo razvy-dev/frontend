@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
-    
+export async function POST(request: NextRequest) {
+    console.log('this will be the post endpoint')
 }
