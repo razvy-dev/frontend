@@ -26,7 +26,7 @@ export default function SignUp() {
 
     const onSubmit = async (data: SignUpFormData) => {
         try {
-            const response = await axios.post("/api/auth/signup", data);
+            const response = await axios.post("/api/auth/sign-up", data);
         
             const newCreatedUser = response.data; 
             
