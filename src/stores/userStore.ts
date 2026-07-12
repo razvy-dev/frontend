@@ -17,6 +17,17 @@ interface UserStoreState {
   clearUser: () => void;
 }
 
+const getStorage = () => {
+  if (typeof window === 'undefined') {
+    return {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    };
+  }
+  return localStorage;
+};
+
 export const useUserStore = create<UserStoreState>()(
   persist(
     (set) => ({
@@ -29,7 +40,7 @@ export const useUserStore = create<UserStoreState>()(
     }),
     {
       name: "user-session",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(getStorage),
       partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
     }
   )

@@ -1,3 +1,3 @@
 export default function usePasswordComplexity() {
-    return 0
+    return 0;
 }

@@ -12,8 +12,8 @@ export async function POST(request: Request) {
         if (!result.success) {
             return NextResponse.json(
                 { 
-                message: "Validation failed", 
-                errors: result.error.format()
+                    message: "Validation error", 
+                    errors: result.error.format()
                 }, 
                 { status: 400 }
             );

@@ -39,9 +39,9 @@ export default function SignUp() {
     }
     
     return (
-        <div className='md:max-h-screen'>
-            <h2>Create a new account</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='md:h-screen bg-white flex flex-col justify-center items-center gap-10'>
+            <h2 className="text-2xl text-black font-bold">Create a new account</h2>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 {/* Username */}
                 <TextField 
                     type="text" 
@@ -71,10 +71,10 @@ export default function SignUp() {
                 {/* Confirm Password */}
                 <TextField 
                     type="password" 
-                    label="Password" 
+                    label="Confirm Password" 
                     placeholder="password" 
                     register={register("confirmPassword")} 
-                    errors={errors.password} 
+                    errors={errors.confirmPassword} 
                 />
 
                 {/* Submit */}
