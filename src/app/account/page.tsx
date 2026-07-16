@@ -2,10 +2,16 @@
 
 // this can either confirm an account or just show the user data
 
+import { useState } from "react"
 import { useUserStore } from "@/stores/userStore"
 import axios from "axios"
 import { useSearchParams } from "next/dist/client/components/navigation"
 import { useEffect } from "react"
+import { redirect } from "next/navigation"
+import TextField from "@/components/inputs/TextField"
+import { useForm } from "react-hook-form"
+import {  DeleteAccountFormData, deleteAccountSchema } from "@/schemas/users/deleteAccount"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 export default function Account() {
     const user = useUserStore((state) => state.user)
@@ -17,18 +23,45 @@ export default function Account() {
     const tokenParams = useSearchParams()
     const token = tokenParams.get('token')
 
+    // in case the user wants to delete their account, ask for their password
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<DeleteAccountFormData>({
+        resolver: zodResolver(deleteAccountSchema),
+        mode: "onTouched"
+    })
+
+    const [password, setPassword] = useState("")
+
+    // handle log out
+
+    const clearUser = useUserStore((state) => state.clearUser);
+
+    const handleSignOut = async () => {
+        await axios.post("/api/auth/sign-out");
+        clearUser();
+    };
+
     // make the delete button
 
-    const handleDelete = () => {
+    const handleDelete = async (data: DeleteAccountFormData) => {
         try {
             const response = await axios.get(`/api/auth/delete-account`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                params: {
-                    accessToken: token // * will see how I extract it in a few minutes
-                }
+                data
             })
+
+            if (response.status == 200) {
+                handleSignOut()
+                redirect('sign-in')
+            }
+        } catch (error) {
+            console.log("Something went wrong here", error)
         }
     }
 
@@ -77,6 +110,24 @@ export default function Account() {
                     <p className="text-lg text-black font-semibold"><strong>Email:</strong> {user.email}</p>
                 </div>
             )}
+
+            <form onSubmit={handleSubmit(handleDelete)}>
+                <TextField
+                    type="text"
+                    label="Password"
+                    placeholder="Password"
+                    register={register("password")}
+                    errors={errors.password}
+                />
+
+                <button className="bg-red text-white p-3">
+                    Delete
+                </button>
+            </form>
+
+            <button className="bg-blue text-white p-3" onClick={handleSignOut} disabled={isSubmitting}>
+                Sign out
+            </button>
         </div>
     )
 }

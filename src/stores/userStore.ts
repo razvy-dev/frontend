@@ -33,7 +33,7 @@ export const useUserStore = create<UserStoreState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      isLoading: true,
+      isLoading: false,
 
       setUser: (user) => set({ user, isAuthenticated: true, isLoading: false }),
       clearUser: () => set({ user: null, isAuthenticated: false, isLoading: false }),
