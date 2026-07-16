@@ -21,7 +21,19 @@ export async function POST(request: Request) {
 
         const response = await serverClient.post("/api/v1/auth/sign-in", result.data);
 
-        return NextResponse.json(response.data, { status: response.status });
+        const { token: tokenData, ...userProfile } = response.data;
+
+        const responseWithCookie = NextResponse.json(userProfile, { status: response.status });
+
+        responseWithCookie.cookies.set("access_token", tokenData.access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 30,
+        });
+
+        return responseWithCookie;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
             return NextResponse.json(error.response.data, { status: error.response.status });
