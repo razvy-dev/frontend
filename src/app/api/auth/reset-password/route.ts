@@ -19,7 +19,8 @@ export async function POST(request: Request) {
             );
         }
 
-        const response = await serverClient.post("/api/v1/auth/reset-password", result.data);
+        const { confirmPassword, ...backendData } = result.data;
+        const response = await serverClient.post("/api/v1/auth/reset-password", backendData);
 
         return NextResponse.json(response.data, { status: response.status });
     } catch (error) {
