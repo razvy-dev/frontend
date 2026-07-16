@@ -1,5 +1,7 @@
+"use client"
+
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod/src/index.js";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
 import { signInSchema, SignInFormData } from '@/schemas/users/signin'

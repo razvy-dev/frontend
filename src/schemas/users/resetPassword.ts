@@ -5,6 +5,7 @@ export const resetPasswordSchema = z.object({
         .min(8, "The current password needs to be at least 8 characters")
         .max(120, "The current password can't be longer than 120 characters")
         .optional(),
+    token: z.string().optional(),
     password: z.string()
         .min(8, "The password needs to be at least 8 characters")
         .max(120, "The password can't be longer than 120 characters")

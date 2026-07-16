@@ -1,3 +1,5 @@
+"use client"
+
 import { ForgotPasswordData, forgotPasswordSchema } from "@/schemas/users/forgotPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,6 +20,14 @@ export default function SignUp() {
     const onSubmit = async (data: ForgotPasswordData) => {
         try {
             const response = await axios.post("/api/auth/forgot-password", data)
+
+            if (response.status == 401) {
+                console.log("You're code might have expired. Try again!")
+            } else if (response.status == 429) {
+                console.log("You made too many requests. Wail and try again later.")
+            } else if (response.status == 500) {
+                console.log("Something went wrong")
+            }
         } catch (error) {
             console.log("Something went wrong", error)
         }

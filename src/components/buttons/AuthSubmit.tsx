@@ -8,7 +8,7 @@ type AuthSubmitProps = {
 
 export default function AuthSubmit(props: AuthSubmitProps) {
     return (
-        <button type="submit" disabled={props.isSubmitting} >
+        <button type="submit" disabled={props.isSubmitting} className="bg-black text-white">
             {props.isSubmitting ? props.contentWhileSubmitting && props.contentWhileSubmitting : props.content}
         </button>
     )

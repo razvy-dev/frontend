@@ -12,8 +12,25 @@ export default function Account() {
     const setUser = useUserStore((state) => state.setUser)
     const isAuthenticated = useUserStore((state) => state.isAuthenticated)
     const isLoading = useUserStore((state) => state.isLoading)
+
+    // get the token, if there is one
     const tokenParams = useSearchParams()
     const token = tokenParams.get('token')
+
+    // make the delete button
+
+    const handleDelete = () => {
+        try {
+            const response = await axios.get(`/api/auth/delete-account`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    accessToken: token // * will see how I extract it in a few minutes
+                }
+            })
+        }
+    }
 
     useEffect(() => {
         if (token) {
@@ -44,11 +61,11 @@ export default function Account() {
     }, [token])
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <div className="min-h-screen bg-white">Loading...</div>
     }
 
     if (!isAuthenticated) {
-        return <div>Please log in to view your account.</div>
+        return <div className="min-h-screen bg-white">Please log in to view your account.</div>
     }
 
     return (
